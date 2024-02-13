@@ -19,7 +19,7 @@ class Wallet:
     def __str__(self):
         """String representation of a Wallet"""
         return str(self.__class__) + ": " + str(self.__dict__)
-
+    
     def sign_transaction(self, transaction):
         h = SHA256.new(str(transaction).encode())
         signature = pkcs1_15.new(self.private_key).sign(h)

@@ -58,3 +58,18 @@ class Node:
             # Filled out later
             self.current_block = Block(None, None)
         return self.current_block
+    
+    def register_node_to_ring(self, id, ip, port, public_key, balance):
+        """Registers a new mode in the ring, called only by the bootstrap node"""
+        self.ring.append(
+            {
+                'id': id,
+                'ip': ip,
+                'port': port,
+                'public_key': public_key,
+                'balance': balance
+            }
+        )
+
+        
+    # def create_transaction(self, receiver, receiver_address, amount):

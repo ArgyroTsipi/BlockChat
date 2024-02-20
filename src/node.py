@@ -1,13 +1,28 @@
 from copy import deepcopy
+import hashlib
+import random
 import time
 from block import Block, Blockchain
 from transaction import Transaction
 from wallet import Wallet
-import pickle
-import itertools
 import time
 from collections import deque
 from threading import Lock, Thread
+import pickle
+import itertools
+import time
+
+from copy import deepcopy
+from collections import deque
+from threading import Lock, Thread
+
+from wallet import Wallet
+from block import Block, Blockchain
+from transaction import Transaction
+
+MINING_DIFFICULTY = 4
+
+
 class Node:
     """
     Class for a node of the ring
@@ -73,3 +88,42 @@ class Node:
 
         
     # def create_transaction(self, receiver, receiver_address, amount):
+
+
+    def mine_block(self, block):
+        """Implements the proof-of-stake algorithm"""
+
+        selected_validator = self.select_validator()
+
+        block.nonce = 0
+        block.index = self.chain.blocks[-1].index + 1
+        block.previous_hash = self.chain.blocks[-1].hash
+
+        while not self.stop_mining:
+            if self.proof_of_stake(block, selected_validator):
+                return True
+            block.nonce += 1
+
+        return False
+
+    def proof_of_stake(self, block, validator):
+        """Calculates hash and validates if the hash meets the proof-of-stake requirements"""
+        
+        # Concatenate block data and validator information
+        block_data = str(block.index) + str(block.transactions) + str(block.previous_hash) + str(validator)
+        
+        # Calculate the hash of the concatenated data
+        block_hash = self.hash(block_data + str(block.nonce))
+
+        # Check if the hash meets the proof-of-stake requirements
+        return block_hash.startswith('0' * MINING_DIFFICULTY)
+
+    def select_validator(self):
+        """Selects a validator based on their stake"""
+        # Example: Select a validator randomly weighted by their stake
+        # You might have a more sophisticated method based on stake distribution
+        return random.choice(list(self.stakeholders.keys()))
+
+    def hash(self, data):
+        """Computes the SHA-256 hash of the data"""
+        return hashlib.sha256(str(data).encode()).hexdigest()

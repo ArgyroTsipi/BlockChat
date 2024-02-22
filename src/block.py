@@ -4,6 +4,8 @@ import hashlib
 import json
 # from Crypto.Hash import SHA256
 import time
+from Exceptions.InvalidBlockException import InvalidBlockException
+from Exceptions.InvalidCapacityException import InvalidCapacityException
 import config
 from transaction import Transaction
 # import blockchain
@@ -18,44 +20,46 @@ class Block:
     previous_hash: hash of the previous Block
     hash: hash of the Block """
 
-    def __init__(self, index, timestamp, transactions, previous_hash):
-        """Initializes a block"""
+    def __init__(self, index, timestamp, transactions, validator, previous_hash):
+        """ Initializes a block """
 
         self.index = index
         self.timestamp = timestamp
         self.transactions = transactions
-        self.validator = None
+        self.validator = validator
         self.previous_hash = previous_hash
         self.hash = self.calculate_hash()
 
     def calculate_hash(self):
-        """Calculates block's hash using sha"""
+        """ Calculates block's hash using sha """
         hash_string = str(self.index) + str(self.timestamp) + str(self.transactions) + str(self.validator) + str(self.previous_hash)
         return hashlib.sha256(hash_string.encode()).hexdigest()
 
-
     def __str__(self):
-        """String representation of a Block.
+        """ String representation of a Block.
         toString() function that will 
         print the details of the block in a readable format."""
         return str(self.__class__) + ": " + str(self.__dict__)
 
-
     def __eq__(self, block):
-        """Overrides the default method and checks the equality of 2 Block
-        objects by comparing their hashes"""
+        """ Overrides the default method and checks the equality of 2 Block
+        objects by comparing their hashes """
         return self.hash == block.hash
 
-
     def add_transaction(self, transaction, capacity):
-        """Adds a new transaction to the block"""
+        """ Adds a new transaction to the block """
         self.transactions.append(transaction)
-        """Check if the block has reached its max capacity"""
-        if len(self.transactions) == capacity:
+        """ Check if the block has reached its max capacity """
+        if len(self.transactions) < capacity:
+            self.transactions.append(transaction)
+        else: 
+            raise InvalidCapacityException("Reached maximum capacity.")
+            
+        return True
+
+    def is_valid(self):
+            """ Checks if block is valid """
             return True
-
-        return False
-
 
 
 # class Blockchain:
@@ -68,27 +72,32 @@ class Block:
         
 #         self.blocks = []
 
-
-
 class Blockchain:
     """ Class of the Blockchain """
-    
+
     def __init__(self):
         self.chain = [self.create_genesis_block()]
         self.pending_transactions = [] ####
 
+    def __str__(self):
+        """ String representation of a Blockchain """
+        return str(self.__class__) + ": " + str(self.__dict__)
+
     def create_genesis_block(self): 
-        """create the first block"""
-        return Block(0, date.datetime.now(), [], "0")
+        """ Create the first block """
+        return Block(0, date.datetime.now(), [], bootstrap_node, "0")
 
     def get_latest_block(self):
         return self.chain[-1]
 
     def add_block(self, new_block):
-        """add a new block to the chain"""
+        """ Add a new block to the chain """
         new_block.previous_hash = self.get_latest_block().hash
         new_block.hash = new_block.calculate_hash()
-        self.chain.append(new_block)
+        # we need to validate block before adding it to chain
+        if new_block.is_valid():
+            self.chain.append(new_block)
+        else: raise InvalidBlockException("The new block is not valid.")
 
     def is_valid(self):
         for i in range(1, len(self.chain)):
@@ -102,12 +111,7 @@ class Blockchain:
                 return False
 
         return True
-#############################
-
-    def __str__(self):
-        """String representation of a Blockchain"""
-        return str(self.__class__) + ": " + str(self.__dict__)
-
+    
 ##############################
     def add_transaction(self, transaction):
         self.pending_transactions.append(transaction)

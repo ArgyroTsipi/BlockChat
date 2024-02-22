@@ -1,13 +1,12 @@
-# import requests
-# import socket
-# import pickle
-# import os
-# import config
-# import subprocess
+import socket
+import pickle
+import os
+import config
+import subprocess
 
-# from PyInquirer import prompt
+# from PyInquirer import prompt/
 # from PyInquirer import Validator, ValidationError
-# from argparse import ArgumentParser
+from argparse import ArgumentParser
 # from texttable import Texttable
 # from time import sleep
 

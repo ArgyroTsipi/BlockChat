@@ -4,10 +4,20 @@ import hashlib
 import json
 # from Crypto.Hash import SHA256
 import time
+import config
+from transaction import Transaction
 # import blockchain
 
 class Block:
-    
+    """ Class for a Block of the blockchain
+
+    index: index of the Block
+    timestamp: timestamp of the Block's creation
+    transactions: list of the Block's transactions
+    validator: node object that creates block
+    previous_hash: hash of the previous Block
+    hash: hash of the Block """
+
     def __init__(self, index, timestamp, transactions, previous_hash):
         """Initializes a block"""
 
@@ -18,22 +28,24 @@ class Block:
         self.previous_hash = previous_hash
         self.hash = self.calculate_hash()
 
-
     def calculate_hash(self):
         """Calculates block's hash using sha"""
         hash_string = str(self.index) + str(self.timestamp) + str(self.transactions) + str(self.validator) + str(self.previous_hash)
         return hashlib.sha256(hash_string.encode()).hexdigest()
 
+
     def __str__(self):
-        """String representation of a Block
-        the toString() function that will 
+        """String representation of a Block.
+        toString() function that will 
         print the details of the block in a readable format."""
         return str(self.__class__) + ": " + str(self.__dict__)
+
 
     def __eq__(self, block):
         """Overrides the default method and checks the equality of 2 Block
         objects by comparing their hashes"""
         return self.hash == block.hash
+
 
     def add_transaction(self, transaction, capacity):
         """Adds a new transaction to the block"""
@@ -59,6 +71,8 @@ class Block:
 
 
 class Blockchain:
+    """ Class of the Blockchain """
+    
     def __init__(self):
         self.chain = [self.create_genesis_block()]
         self.pending_transactions = [] ####
@@ -88,7 +102,7 @@ class Blockchain:
                 return False
 
         return True
-    #######################
+#############################
 
     def __str__(self):
         """String representation of a Blockchain"""

@@ -58,11 +58,11 @@ class Node:
         self.current_block = None
         self.capacity = None
         self.stop_mining = False
-
+####################################################################################################################################
     def __str__(self):
         """String representation of a node"""
         return str(self.__class__) + ": " + str(self.__dict__)
-
+####################################################################################################################################
     def create_new_block(self):
         """Creates a new block"""
         
@@ -73,7 +73,7 @@ class Node:
             # Filled out later
             self.current_block = Block(None, None)
         return self.current_block
-    
+  ############################################################################################################## 
     def register_node_to_ring(self, id, ip, port, public_key, balance):
         """Registers a new mode in the ring, called only by the bootstrap node"""
         self.ring.append(
@@ -86,10 +86,17 @@ class Node:
             }
         )
 
-        
+####################################################################################################################################        
     # def create_transaction(self, receiver, receiver_address, amount):
 
 
+
+
+
+
+
+
+####################  mine block  ########################################################################################
     def mine_block(self, block):
         """Implements the proof-of-stake algorithm"""
 
@@ -121,9 +128,9 @@ class Node:
     def select_validator(self):
         """Selects a validator based on their stake"""
         # Example: Select a validator randomly weighted by their stake
-        # You might have a more sophisticated method based on stake distribution
         return random.choice(list(self.stakeholders.keys()))
 
     def hash(self, data):
         """Computes the SHA-256 hash of the data"""
         return hashlib.sha256(str(data).encode()).hexdigest()
+    ####################################################################################################################################

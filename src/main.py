@@ -7,15 +7,11 @@ from transaction import Transaction
 from node import Node
 
 
-blockchain = Blockchain()
-# wallet = Wallet()
-# Add blocks to the blockchain
-blockchain.add_block(Block(1, date.datetime.now(), [], ""))
-blockchain.add_block(Block(2, date.datetime.now(), [], ""))
-blockchain.add_block(Block(3, date.datetime.now(), [], ""))
+blockchain = Blockchain()# Add blocks to the blockchain
+blockchain.add_block(Block(1, date.datetime.now(), [], None,  ""))
+blockchain.add_block(Block(2, date.datetime.now(), [], None, ""))
+blockchain.add_block(Block(3, date.datetime.now(), [],None, ""))
 
-# wallet.transactions = [1]
-# wallet.sign_transaction()
 
 # Print the contents of the blockchain
 for block in blockchain.chain:

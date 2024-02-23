@@ -10,6 +10,25 @@ import config
 from transaction import Transaction
 # import blockchain
 
+# TUTORIALS
+
+# Blockchain tutorial in python
+#  https://www.activestate.com/blog/how-to-build-a-blockchain-in-python/
+
+# GitHub tutorial for blockchain using proof-of-stake
+#  https://github.com/hvuhsg/yoyocoin/tree/main/src/blockchain
+
+# PoS info
+#  https://www.blockchain-council.org/blockchain/exactly-proof-stake-implemented/
+
+# JS tutorial using proof of stake
+#  https://medium.com/coinmonks/implementing-proof-of-stake-e26fa5fb8716
+#  https://medium.com/coinmonks/implementing-proof-of-stake-part-2-748156d5c85e
+#  https://medium.com/coinmonks/implementing-proof-of-stake-part-3-c68b953a50be
+#  https://medium.com/coinmonks/implementing-proof-of-stake-part-4-2107bb07dfed
+#  https://medium.com/coinmonks/implementing-proof-of-stake-part-5-7e3d5b6cdc31
+#  https://medium.com/coinmonks/implementing-proof-of-stake-part-6-c811ce78ab0f
+
 class Block:
     """ Class for a Block of the blockchain
 
@@ -85,7 +104,7 @@ class Blockchain:
 
     def create_genesis_block(self): 
         """ Create the first block """
-        return Block(0, date.datetime.now(), [], bootstrap_node, "0")
+        return Block(0, date.datetime.now(), [], None, "0")
 
     def get_latest_block(self):
         return self.chain[-1]
